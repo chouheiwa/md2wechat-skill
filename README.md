@@ -109,12 +109,54 @@ flowchart LR
 
 > 💡 **最新版本**：访问 [Releases 页面](https://github.com/geekjourneyx/md2wechat-skill/releases) 下载
 
-| 你的系统 | 下载链接 | 说明 |
-|----------|----------|------|
-| 🪟 **Windows** | [下载 .exe](https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-windows-amd64.exe) | 双击运行 |
-| 🍎 **Mac Intel** | [下载](https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-darwin-amd64) | 终端运行 |
-| 🍎 **Mac M1/M2** | [下载](https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-darwin-arm64) | 终端运行 |
-| 🐧 **Linux** | [下载](https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-linux-amd64) | 放到 `/usr/local/bin` |
+| 你的系统 | 下载链接 | 安装位置 |
+|----------|----------|----------|
+| 🪟 **Windows** | [下载 .exe](https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-windows-amd64.exe) | 任意文件夹（或 `C:\Windows\System32\`） |
+| 🍎 **Mac Intel** | [下载](https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-darwin-amd64) | `/usr/local/bin/` 或 `~/.local/bin/` |
+| 🍎 **Mac M1/M2** | [下载](https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-darwin-arm64) | `/usr/local/bin/` 或 `~/.local/bin/` |
+| 🐧 **Linux** | [下载](https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-linux-amd64) | `/usr/local/bin/` 或 `~/.local/bin/` |
+
+**安装步骤**：
+
+<details>
+<summary><b>Windows 安装方法</b></summary>
+
+1. 下载 `md2wechat-windows-amd64.exe`
+2. 重命名为 `md2wechat.exe`（可选）
+3. 放到任意文件夹，或复制到 `C:\Windows\System32\`（全局可用）
+4. 打开 CMD 或 PowerShell，输入 `md2wechat --help` 测试
+
+</details>
+
+<details>
+<summary><b>Mac/Linux 安装方法</b></summary>
+
+**方法一：命令行安装（推荐）**
+```bash
+# 下载并移动到系统目录
+curl -Lo md2wechat https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-linux-amd64
+chmod +x md2wechat
+sudo mv md2wechat /usr/local/bin/
+
+# 测试
+md2wechat --help
+```
+
+**方法二：用户目录安装（无需 sudo）**
+```bash
+mkdir -p ~/.local/bin
+curl -Lo ~/.local/bin/md2wechat https://github.com/geekjourneyx/md2wechat-skill/releases/latest/download/md2wechat-linux-amd64
+chmod +x ~/.local/bin/md2wechat
+
+# 添加到 PATH（如果还没有）
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc  # 或 ~/.zshrc
+source ~/.bashrc
+
+# 测试
+md2wechat --help
+```
+
+</details>
 
 > ⚠️ **Mac 用户**：下载后如果提示「无法打开」，右键点击 → 打开 → 仍要打开
 
