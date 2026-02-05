@@ -129,7 +129,7 @@ chmod +x ~/.openclaw/skills/md2wechat/scripts/*.sh
 
 | 环境变量 | 必需 | 说明 | 获取方式 |
 |---------|------|------|---------|
-| `WECHAT_APPID` | 草稿上传时 | 微信公众号 AppID | [微信公众平台](https://mp.weixin.qq.com) → 设置与开发 → 基本配置 |
+| `WECHAT_APPID` | 草稿上传时 | 微信公众号 AppID | [微信开发者平台](https://developers.weixin.qq.com/platform) → 开发接口管理 |
 | `WECHAT_SECRET` | 草稿上传时 | 微信公众号 Secret | 同上，点击"重置"获取 |
 | `IMAGE_API_KEY` | AI 图片时 | 图片生成 API Key | 见 [图片服务配置](IMAGE_PROVISIONERS.md) |
 

@@ -45,13 +45,15 @@ image:
 
 ### 步骤
 
-1. **登录微信公众平台**
+1. **登录微信开发者平台**
 
-   访问 [mp.weixin.qq.com](https://mp.weixin.qq.com)
+   访问 [developers.weixin.qq.com/platform](https://developers.weixin.qq.com/platform)
 
-2. **进入开发设置**
+   > 注：开发接口管理已于 2025 年 12 月迁移至微信开发者平台
 
-   设置与开发 > 基本配置
+2. **进入开发接口管理**
+
+   选择你的公众号 → 开发接口管理
 
 3. **获取 AppID 和 AppSecret**
 

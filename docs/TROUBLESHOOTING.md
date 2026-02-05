@@ -78,8 +78,8 @@ sudo mv md2wechat /usr/local/bin/
 **解决步骤**：
 
 1. **获取微信凭证**
-   - 打开 https://mp.weixin.qq.com
-   - 登录后点击「设置与开发」→「基本配置」
+   - 打开 https://developers.weixin.qq.com/platform
+   - 登录后选择公众号 → 开发接口管理
    - 复制 AppID
    - 点击「重置」获取 AppSecret
 

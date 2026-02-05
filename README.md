@@ -285,7 +285,7 @@ md2wechat config init
 
 | 配置项 | 是什么 | 在哪获取 |
 |--------|--------|----------|
-| AppID | 公众号唯一标识 | mp.weixin.qq.com → 设置与开发 → 基本配置 |
+| AppID | 公众号唯一标识 | [微信开发者平台](https://developers.weixin.qq.com/platform) → 开发接口管理 |
 | Secret | API 密钥 | 同上，需要管理员权限 |
 
 ### 第三步：开始使用
