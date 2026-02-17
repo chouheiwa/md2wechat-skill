@@ -39,7 +39,6 @@ func NewAIConverter(log *zap.Logger, theme *ThemeManager) *aiConverter {
 // 注意：实际的 AI 调用由外部（Claude）执行，此方法准备请求结构
 func (c *converter) convertViaAI(req *ConvertRequest) *ConvertResult {
 	result := &ConvertResult{
-		Mode:    ModeAI,
 		Theme:   req.Theme,
 		Success: false,
 	}
@@ -85,12 +84,6 @@ func (c *converter) buildAIPrompt(req *ConvertRequest) (string, error) {
 		theme, err := c.theme.GetTheme(req.Theme)
 		if err != nil {
 			// 如果找不到主题，使用通用提示词
-			prompt = c.getGenericPrompt()
-		} else if theme.Type != "ai" {
-			// 不是 AI 主题，使用通用提示词
-			c.log.Warn("theme is not AI mode, using generic prompt",
-				zap.String("theme", req.Theme),
-				zap.String("type", theme.Type))
 			prompt = c.getGenericPrompt()
 		} else {
 			// 使用 PromptBuilder 构建完整 Prompt
@@ -156,7 +149,6 @@ func (c *converter) PrepareAIRequest(req *ConvertRequest) (*AIConvertRequest, er
 func CompleteAIConversion(html string, images []ImageRef, theme string) *ConvertResult {
 	return &ConvertResult{
 		HTML:    html,
-		Mode:    ModeAI,
 		Theme:   theme,
 		Images:  images,
 		Success: true,

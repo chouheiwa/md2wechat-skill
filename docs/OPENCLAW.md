@@ -131,31 +131,6 @@ chmod +x ~/.openclaw/skills/md2wechat/scripts/*.sh
 |---------|------|------|---------|
 | `WECHAT_APPID` | 草稿上传时 | 微信公众号 AppID | [微信开发者平台](https://developers.weixin.qq.com/platform) → 开发接口管理 |
 | `WECHAT_SECRET` | 草稿上传时 | 微信公众号 Secret | 同上，点击"重置"获取 |
-| `IMAGE_API_KEY` | AI 图片时 | 图片生成 API Key | 见 [图片服务配置](IMAGE_PROVISIONERS.md) |
-
-### 可选：图片生成配置
-
-如果需要 AI 图片生成功能，添加以下配置：
-
-```json
-{
-  "skills": {
-    "entries": {
-      "md2wechat": {
-        "enabled": true,
-        "env": {
-          "WECHAT_APPID": "你的AppID",
-          "WECHAT_SECRET": "你的Secret",
-          "IMAGE_PROVIDER": "modelscope",
-          "IMAGE_API_KEY": "ms-your-token-here",
-          "IMAGE_API_BASE": "https://api-inference.modelscope.cn",
-          "IMAGE_MODEL": "Tongyi-MAI/Z-Image-Turbo"
-        }
-      }
-    }
-  }
-}
-```
 
 ---
 

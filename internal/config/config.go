@@ -17,19 +17,9 @@ type Config struct {
 	WechatAppID  string `json:"wechat_appid" yaml:"wechat_appid" env:"WECHAT_APPID"`
 	WechatSecret string `json:"wechat_secret" yaml:"wechat_secret" env:"WECHAT_SECRET"`
 
-	// md2wechat.cn API 配置
-	MD2WechatAPIKey     string `json:"md2wechat_api_key" yaml:"md2wechat_api_key" env:"MD2WECHAT_API_KEY"`
+	// md2wechat API 配置
 	MD2WechatBaseURL    string `json:"md2wechat_base_url" yaml:"md2wechat_base_url" env:"MD2WECHAT_BASE_URL"`
-	DefaultConvertMode  string `json:"default_convert_mode" yaml:"default_convert_mode" env:"CONVERT_MODE"`
 	DefaultTheme        string `json:"default_theme" yaml:"default_theme" env:"DEFAULT_THEME"`
-	DefaultBackgroundType string `json:"default_background_type" yaml:"default_background_type" env:"DEFAULT_BACKGROUND_TYPE"` // default/grid/none
-
-	// 图片生成 API 配置
-	ImageProvider string `json:"image_provider" yaml:"image_provider" env:"IMAGE_PROVIDER"`
-	ImageAPIKey   string `json:"image_api_key" yaml:"image_api_key" env:"IMAGE_API_KEY"`
-	ImageAPIBase  string `json:"image_api_base" yaml:"image_api_base" env:"IMAGE_API_BASE"`
-	ImageModel    string `json:"image_model" yaml:"image_model" env:"IMAGE_MODEL"`
-	ImageSize     string `json:"image_size" yaml:"image_size" env:"IMAGE_SIZE"`
 
 	// 图片处理配置
 	CompressImages bool  `json:"compress_images" yaml:"compress_images" env:"COMPRESS_IMAGES"`
@@ -51,16 +41,8 @@ type configFile struct {
 	} `json:"wechat" yaml:"wechat"`
 
 	API struct {
-		MD2WechatKey       string `json:"md2wechat_key" yaml:"md2wechat_key"`
 		MD2WechatBaseURL  string `json:"md2wechat_base_url" yaml:"md2wechat_base_url"`
-		ImageKey          string `json:"image_key" yaml:"image_key"`
-		ImageBaseURL      string `json:"image_base_url" yaml:"image_base_url"`
-		ImageProvider     string `json:"image_provider" yaml:"image_provider"`
-		ImageModel        string `json:"image_model" yaml:"image_model"`
-		ImageSize         string `json:"image_size" yaml:"image_size"`
-		ConvertMode       string `json:"convert_mode" yaml:"convert_mode"`
 		DefaultTheme      string `json:"default_theme" yaml:"default_theme"`
-		BackgroundType    string `json:"background_type" yaml:"background_type"`
 		HTTPTimeout       int    `json:"http_timeout" yaml:"http_timeout"`
 	} `json:"api" yaml:"api"`
 
@@ -80,18 +62,12 @@ func Load() (*Config, error) {
 // LoadWithDefaults 使用指定配置文件路径加载配置
 func LoadWithDefaults(configPath string) (*Config, error) {
 	cfg := &Config{
-		DefaultConvertMode:  "api",
-		DefaultTheme:        "default",
-		DefaultBackgroundType: "default",
+		DefaultTheme:        "autumn-warm",
 		MD2WechatBaseURL:   "https://www.md2wechat.cn",
 		CompressImages:     true,
 		MaxImageWidth:      1920,
 		MaxImageSize:       5 * 1024 * 1024, // 5MB
 		HTTPTimeout:        30,
-		ImageProvider:      "openai",
-		ImageAPIBase:       "https://api.openai.com/v1",
-		ImageModel:         "dall-e-3",
-		ImageSize:          "1024x1024",
 	}
 
 	// 1. 尝试从配置文件加载
@@ -195,35 +171,11 @@ func loadFromYAML(cfg *Config, data []byte) error {
 	if cf.Wechat.Secret != "" {
 		cfg.WechatSecret = cf.Wechat.Secret
 	}
-	if cf.API.MD2WechatKey != "" {
-		cfg.MD2WechatAPIKey = cf.API.MD2WechatKey
-	}
 	if cf.API.MD2WechatBaseURL != "" {
 		cfg.MD2WechatBaseURL = cf.API.MD2WechatBaseURL
 	}
-	if cf.API.ImageKey != "" {
-		cfg.ImageAPIKey = cf.API.ImageKey
-	}
-	if cf.API.ImageBaseURL != "" {
-		cfg.ImageAPIBase = cf.API.ImageBaseURL
-	}
-	if cf.API.ImageProvider != "" {
-		cfg.ImageProvider = cf.API.ImageProvider
-	}
-	if cf.API.ImageModel != "" {
-		cfg.ImageModel = cf.API.ImageModel
-	}
-	if cf.API.ImageSize != "" {
-		cfg.ImageSize = cf.API.ImageSize
-	}
-	if cf.API.ConvertMode != "" {
-		cfg.DefaultConvertMode = cf.API.ConvertMode
-	}
 	if cf.API.DefaultTheme != "" {
 		cfg.DefaultTheme = cf.API.DefaultTheme
-	}
-	if cf.API.BackgroundType != "" {
-		cfg.DefaultBackgroundType = cf.API.BackgroundType
 	}
 	if cf.API.HTTPTimeout > 0 {
 		cfg.HTTPTimeout = cf.API.HTTPTimeout
@@ -253,35 +205,11 @@ func loadFromJSON(cfg *Config, data []byte) error {
 	if cf.Wechat.Secret != "" {
 		cfg.WechatSecret = cf.Wechat.Secret
 	}
-	if cf.API.MD2WechatKey != "" {
-		cfg.MD2WechatAPIKey = cf.API.MD2WechatKey
-	}
 	if cf.API.MD2WechatBaseURL != "" {
 		cfg.MD2WechatBaseURL = cf.API.MD2WechatBaseURL
 	}
-	if cf.API.ImageKey != "" {
-		cfg.ImageAPIKey = cf.API.ImageKey
-	}
-	if cf.API.ImageBaseURL != "" {
-		cfg.ImageAPIBase = cf.API.ImageBaseURL
-	}
-	if cf.API.ImageProvider != "" {
-		cfg.ImageProvider = cf.API.ImageProvider
-	}
-	if cf.API.ImageModel != "" {
-		cfg.ImageModel = cf.API.ImageModel
-	}
-	if cf.API.ImageSize != "" {
-		cfg.ImageSize = cf.API.ImageSize
-	}
-	if cf.API.ConvertMode != "" {
-		cfg.DefaultConvertMode = cf.API.ConvertMode
-	}
 	if cf.API.DefaultTheme != "" {
 		cfg.DefaultTheme = cf.API.DefaultTheme
-	}
-	if cf.API.BackgroundType != "" {
-		cfg.DefaultBackgroundType = cf.API.BackgroundType
 	}
 	if cf.API.HTTPTimeout > 0 {
 		cfg.HTTPTimeout = cf.API.HTTPTimeout
@@ -305,35 +233,11 @@ func loadFromEnv(cfg *Config) {
 	if v := os.Getenv("WECHAT_SECRET"); v != "" {
 		cfg.WechatSecret = v
 	}
-	if v := os.Getenv("MD2WECHAT_API_KEY"); v != "" {
-		cfg.MD2WechatAPIKey = v
-	}
 	if v := os.Getenv("MD2WECHAT_BASE_URL"); v != "" {
 		cfg.MD2WechatBaseURL = v
 	}
-	if v := os.Getenv("CONVERT_MODE"); v != "" {
-		cfg.DefaultConvertMode = v
-	}
 	if v := os.Getenv("DEFAULT_THEME"); v != "" {
 		cfg.DefaultTheme = v
-	}
-	if v := os.Getenv("DEFAULT_BACKGROUND_TYPE"); v != "" {
-		cfg.DefaultBackgroundType = v
-	}
-	if v := os.Getenv("IMAGE_API_KEY"); v != "" {
-		cfg.ImageAPIKey = v
-	}
-	if v := os.Getenv("IMAGE_API_BASE"); v != "" {
-		cfg.ImageAPIBase = v
-	}
-	if v := os.Getenv("IMAGE_PROVIDER"); v != "" {
-		cfg.ImageProvider = v
-	}
-	if v := os.Getenv("IMAGE_MODEL"); v != "" {
-		cfg.ImageModel = v
-	}
-	if v := os.Getenv("IMAGE_SIZE"); v != "" {
-		cfg.ImageSize = v
 	}
 	if v := os.Getenv("COMPRESS_IMAGES"); v != "" {
 		cfg.CompressImages = getEnvBool("COMPRESS_IMAGES", true)
@@ -366,15 +270,6 @@ func (c *Config) Validate() error {
 		}
 	}
 
-	// 验证转换模式
-	if c.DefaultConvertMode != "api" && c.DefaultConvertMode != "ai" {
-		return &ConfigError{
-			Field:   "ConvertMode",
-			Message: "转换模式必须是 'api' 或 'ai'",
-			Hint:    "配置文件中设置 api.convert_mode: api",
-		}
-	}
-
 	// 验证数值范围
 	if c.MaxImageWidth < 100 || c.MaxImageWidth > 10000 {
 		return &ConfigError{
@@ -401,22 +296,6 @@ func (c *Config) Validate() error {
 	return nil
 }
 
-// ValidateForImageGeneration 验证图片生成配置
-func (c *Config) ValidateForImageGeneration() error {
-	if c.ImageAPIKey == "" {
-		return &ConfigError{Field: "ImageAPIKey", Message: "IMAGE_API_KEY is required for image generation"}
-	}
-	return nil
-}
-
-// ValidateForAPIConversion 验证 API 转换配置
-func (c *Config) ValidateForAPIConversion() error {
-	if c.MD2WechatAPIKey == "" && c.DefaultConvertMode == "api" {
-		return &ConfigError{Field: "MD2WechatAPIKey", Message: "MD2WECHAT_API_KEY is required for API mode"}
-	}
-	return nil
-}
-
 // GetConfigFile 获取配置文件路径
 func (c *Config) GetConfigFile() string {
 	return c.configFile
@@ -427,16 +306,8 @@ func (c *Config) ToMap(maskSecret bool) map[string]any {
 	result := map[string]any{
 		"wechat_appid":         c.WechatAppID,
 		"wechat_secret":        maskIf(c.WechatSecret, maskSecret),
-		"default_convert_mode": c.DefaultConvertMode,
 		"default_theme":        c.DefaultTheme,
-		"default_background_type": c.DefaultBackgroundType,
-		"md2wechat_api_key":    maskIf(c.MD2WechatAPIKey, maskSecret),
 		"md2wechat_base_url":  c.MD2WechatBaseURL,
-		"image_provider":       c.ImageProvider,
-		"image_api_key":        maskIf(c.ImageAPIKey, maskSecret),
-		"image_api_base":       c.ImageAPIBase,
-		"image_model":          c.ImageModel,
-		"image_size":           c.ImageSize,
 		"compress_images":      c.CompressImages,
 		"max_image_width":      c.MaxImageWidth,
 		"max_image_size_mb":    c.MaxImageSize / 1024 / 1024,
@@ -453,16 +324,8 @@ func SaveConfig(path string, cfg *Config) error {
 	cf := configFile{}
 	cf.Wechat.AppID = cfg.WechatAppID
 	cf.Wechat.Secret = cfg.WechatSecret
-	cf.API.MD2WechatKey = cfg.MD2WechatAPIKey
 	cf.API.MD2WechatBaseURL = cfg.MD2WechatBaseURL
-	cf.API.ImageKey = cfg.ImageAPIKey
-	cf.API.ImageBaseURL = cfg.ImageAPIBase
-	cf.API.ImageProvider = cfg.ImageProvider
-	cf.API.ImageModel = cfg.ImageModel
-	cf.API.ImageSize = cfg.ImageSize
-	cf.API.ConvertMode = cfg.DefaultConvertMode
 	cf.API.DefaultTheme = cfg.DefaultTheme
-	cf.API.BackgroundType = cfg.DefaultBackgroundType
 	cf.API.HTTPTimeout = cfg.HTTPTimeout
 	cf.Image.Compress = cfg.CompressImages
 	cf.Image.MaxWidth = cfg.MaxImageWidth

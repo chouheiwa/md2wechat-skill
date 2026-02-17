@@ -13,33 +13,6 @@
 
 ---
 
-> ### ⚠️ 重要提示：API 模式需要 md2wechat.cn API 服务
-> **本工具使用 md2wechat.cn API 服务，使用 API 模式前需要先获取 API Key**
->
-> - 📖 **API 文档**：https://www.md2wechat.cn/api-docs
-> - 📧 **联系获取**：通过 [官网](https://www.md2wechat.cn/api-docs) 联系获取 API Key
-> - 💡 **AI 模式**：不需要 API Key，直接使用 Claude 即可
-
----
-
-> ### 🎉 API 服务重磅升级 - 内测招募
-> **YouMind 内置主题，全新分类系统，重塑内容创作体验**
->
-> md2wechat API 服务即将迎来重大升级，带来 **YouMind 内置主题库**和**全新主题分类**：
-> - 🎨 **丰富主题库**：精选 YouMind 内置主题，覆盖科技、生活、商业等多元场景
-> - 📂 **全新分类**：智能分类系统，快速定位最匹配的主题风格
-> - ⚡ **一键应用**：API 模式下直接调用主题，创作更高效
->
-> 📚 **主题预览**: [https://md2wechat.app/theme-gallery](https://md2wechat.app/theme-gallery)
->
-> 🔥 **目前处于内测阶段，诚邀自动化 Agent 创作者参与测试！**
->
-> - 🎯 **适合对象**：Agent 开发者、自动化内容创作者、API 集成者
-> - 🎁 **内测福利**：优先体验新功能，影响产品方向
-> - 📩 **参与方式**：扫描底部公众号二维码联系，备注「API内测」
-
----
-
 [快速开始](#-5分钟快速上手) • [Claude Code](#-claude-code-集成) • [OpenClaw](#-openclaw-支持) • [功能介绍](#-核心功能) • [使用说明](#-使用方法) • [常见问题](#-常见问题)
 
 ---
@@ -78,32 +51,25 @@
 
 ```mermaid
 flowchart LR
-    A[用 Markdown 写文章] --> B{选择模式}
+    A[用 Markdown 写文章] --> B[Claude AI 生成 HTML]
+    B --> C[精美排版]
+    C --> D[预览效果]
 
-    B -->|API 模式| C[调用 md2wechat.cn API]
-    C --> D[获取 HTML]
-
-    B -->|AI 模式 ⭐| E[Claude AI 生成 HTML]
-    E --> F[精美排版]
-
-    D --> G[预览效果]
-    F --> G
-
-    G --> H{满意吗}
-    H -->|不满意| B
-    H -->|满意| I[上传图片]
-    I --> J[发送到微信草稿箱]
-    J --> K[完成]
+    D --> E{满意吗}
+    E -->|不满意| B
+    E -->|满意| F[上传图片]
+    F --> G[发送到微信草稿箱]
+    G --> H[完成]
 
     classDef nodeA fill:#e3f2fd,stroke:#2196f3,color:#0d47a1
-    classDef nodeE fill:#fff3e0,stroke:#ff9800,color:#e65100
-    classDef nodeJ fill:#e8f5e9,stroke:#4caf50,color:#1b5e20
-    classDef nodeK fill:#c8e6c9,stroke:#4caf50,color:#1b5e20
+    classDef nodeB fill:#fff3e0,stroke:#ff9800,color:#e65100
+    classDef nodeG fill:#e8f5e9,stroke:#4caf50,color:#1b5e20
+    classDef nodeH fill:#c8e6c9,stroke:#4caf50,color:#1b5e20
 
     class A nodeA
-    class E nodeE
-    class J nodeJ
-    class K nodeK
+    class B nodeB
+    class G nodeG
+    class H nodeH
 ```
 
 ### 五大核心功能
@@ -113,7 +79,6 @@ flowchart LR
 | **Markdown 转换** | `convert` | 将 Markdown 转换为微信格式 HTML | 所有用户 |
 | **风格写作** | `write` | 用创作者风格辅助写作，自动生成文章和封面提示词 | 写作小白、内容创作者 |
 | **AI 去痕** | `humanize` | 去除 AI 生成痕迹，让文章听起来更自然、像人写的 | AI 写作用户 |
-| **小绿书** 🆕 | `create_image_post` | 创建图片消息（小绿书），最多 20 张图片 | 图片内容创作者 |
 | **草稿推送** | `convert --draft` | 一键发送到微信草稿箱 | 需要频繁发布的用户 |
 
 **`write` 与 `convert` 的区别：**
@@ -129,30 +94,19 @@ flowchart LR
 - `write` = 帮你写文章（从想法到完整文章）
 - `convert` = 帮你排版（从 Markdown 到微信格式）
 
-### 两种转换模式
-
-| 模式 | 适合谁 | 特点 | 样式 |
-|------|--------|------|------|
-| **API 模式** | 追求稳定、快速 | 调用 md2wechat.cn API，秒级响应 | 简洁专业 |
-| **AI 模式** ⭐ | 追求精美排版 | Claude AI 生成，样式更丰富 | 秋日暖光 / 春日清新 / 深海静谧 |
-
 ### 完整工作流程
 
 ```mermaid
 flowchart LR
     A1[Markdown 写作] --> A2[插入图片]
-    A2 --> B1{选择模式}
+    A2 --> B3[Claude AI]
 
-    B1 -->|API| B2[md2wechat.cn]
-    B1 -->|AI| B3[Claude AI]
-
-    B2 --> B4[HTML 生成]
-    B3 --> B4
+    B3 --> B4[HTML 生成]
 
     B4 --> C1[预览效果]
     C1 --> C2{满意吗}
 
-    C2 -->|调整| B1
+    C2 -->|调整| B3
     C2 -->|OK| C3[上传图片]
     C3 --> C4[发送草稿]
     C4 --> C5[完成]
@@ -333,8 +287,8 @@ md2wechat convert article.md --preview
 # 转换并保存为 HTML 文件
 md2wechat convert article.md -o output.html
 
-# 使用 AI 模式生成精美排版
-md2wechat convert article.md --mode ai --theme autumn-warm --preview
+# 使用主题生成精美排版
+md2wechat convert article.md --theme autumn-warm --preview
 ```
 
 ### 风格写作 🆕
@@ -650,138 +604,6 @@ md2wechat convert article.md --draft --cover cover.jpg
 | 🟢 **春日清新** | `--theme spring-fresh` | 清新绿色调 | 旅行日记、自然主题 |
 | 🔵 **深海静谧** | `--theme ocean-calm` | 专业蓝色调 | 技术文章、商业分析 |
 
-### API 模式主题选择 🆕
-
-**v2 API 现已支持 38 个精美主题！**
-
-#### 主题预览
-📚 **完整主题预览**: [https://md2wechat.app/theme-gallery](https://md2wechat.app/theme-gallery)
-
-#### 主题分类
-
-**基础主题（6 个）** - v1.0 内置
-
-| 主题 | 风格 | 适合 |
-|------|------|------|
-| `default` | 微信经典，温暖舒适 | 通用内容 |
-| `bytedance` | 科技现代，简洁利落 | 科技资讯 |
-| `apple` | 视觉渐变，精致优雅 | 产品评测 |
-| `sports` | 活力动感，充满能量 | 体育健康 |
-| `chinese` | 古典雅致，书卷气息 | 文化文章 |
-| `cyber` | 未来科技，霓虹光影 | 前沿科技 |
-
-**Minimal 系列（8 个）** - 干净克制，纯色文字无装饰
-
-| 颜色 | 主题 | 命令 |
-|------|------|------|
-| 🟡 金色 | minimal-gold | `--theme minimal-gold` |
-| 🟢 绿色 | minimal-green | `--theme minimal-green` |
-| 🔵 蓝色 | minimal-blue | `--theme minimal-blue` |
-| 🟠 橙色 | minimal-orange | `--theme minimal-orange` |
-| 🔴 红色 | minimal-red | `--theme minimal-red` |
-| 🎓 藏青 | minimal-navy | `--theme minimal-navy` |
-| ⚫ 灰色 | minimal-gray | `--theme minimal-gray` |
-| 🌤 天蓝 | minimal-sky | `--theme minimal-sky` |
-
-**Focus 系列（8 个）** - 居中对称，标题上下双横线
-
-| 颜色 | 主题 | 命令 |
-|------|------|------|
-| 🟡 金色 | focus-gold | `--theme focus-gold` |
-| 🟢 绿色 | focus-green | `--theme focus-green` |
-| 🔵 蓝色 | focus-blue | `--theme focus-blue` |
-| 🟠 橙色 | focus-orange | `--theme focus-orange` |
-| 🔴 红色 | focus-red | `--theme focus-red` |
-| 🎓 藏青 | focus-navy | `--theme focus-navy` |
-| ⚫ 灰色 | focus-gray | `--theme focus-gray` |
-| 🌤 天蓝 | focus-sky | `--theme focus-sky` |
-
-**Elegant 系列（8 个）** - 层次丰富，左边框递减 + 渐变背景
-
-| 颜色 | 主题 | 命令 |
-|------|------|------|
-| 🟡 金色 | elegant-gold | `--theme elegant-gold` |
-| 🟢 绿色 | elegant-green | `--theme elegant-green` |
-| 🔵 蓝色 | elegant-blue | `--theme elegant-blue` |
-| 🟠 橙色 | elegant-orange | `--theme elegant-orange` |
-| 🔴 红色 | elegant-red | `--theme elegant-red` |
-| 🎓 藏青 | elegant-navy | `--theme elegant-navy` |
-| ⚫ 灰色 | elegant-gray | `--theme elegant-gray` |
-| 🌤 天蓝 | elegant-sky | `--theme elegant-sky` |
-
-**Bold 系列（8 个）** - 视觉冲击，标题满底色 + 圆角投影
-
-| 颜色 | 主题 | 命令 |
-|------|------|------|
-| 🟡 金色 | bold-gold | `--theme bold-gold` |
-| 🟢 绿色 | bold-green | `--theme bold-green` |
-| 🔵 蓝色 | bold-blue | `--theme bold-blue` |
-| 🟠 橙色 | bold-orange | `--theme bold-orange` |
-| 🔴 红色 | bold-red | `--theme bold-red` |
-| 🎓 藏青 | bold-navy | `--theme bold-navy` |
-| ⚫ 灰色 | bold-gray | `--theme bold-gray` |
-| 🌤 天蓝 | bold-sky | `--theme bold-sky` |
-
-#### 主题命名规则
-
-```
-<系列>-<颜色>
-
-系列:
-  minimal  - 干净克制
-  focus    - 居中对称
-  elegant  - 层次丰富
-  bold     - 视觉冲击
-
-颜色: gold, green, blue, orange, red, navy, gray, sky
-```
-
-#### 使用示例
-
-```bash
-# 使用 Elegant 金色主题
-md2wechat convert article.md --theme elegant-gold --preview
-
-# 使用 Minimal 蓝色主题
-md2wechat convert article.md --theme minimal-blue --draft --cover cover.jpg
-
-# 使用 Bold 红色主题（视觉冲击强）
-md2wechat convert article.md --theme bold-red
-```
-
-> 💡 **提示**: v2.0 新主题需要配置 `md2wechat_base_url: https://md2wechat.app`
-
-#### 背景类型选择 🆕
-
-除了主题，你还可以自定义背景样式：
-
-| 背景类型 | 命令 | 效果 | 适合场景 |
-|----------|------|------|----------|
-| `default` | `--background-type default` | 默认背景（纯色或渐变） | 通用内容 |
-| `grid` | `--background-type grid` | 网格纹理背景 | 技术文档、笔记类 |
-| `none` | `--background-type none` | 无背景（透明） | 嵌入式内容 |
-
-**使用示例：**
-
-```bash
-# 使用网格背景
-md2wechat convert article.md --theme elegant-gold --background-type grid
-
-# 使用无背景（适合复制到其他编辑器）
-md2wechat convert article.md --theme minimal-blue --background-type none
-
-# 组合使用
-md2wechat convert article.md --theme focus-green --background-type grid --draft --cover cover.jpg
-```
-
-**配置文件设置：**
-
-```yaml
-# ~/.config/md2wechat/config.yaml
-api:
-  background_type: grid  # default/grid/none
-```
-
 ### 图片处理
 
 ```bash
@@ -790,117 +612,21 @@ md2wechat upload_image photo.jpg
 
 # 下载网络图片并上传
 md2wechat download_and_upload https://example.com/image.jpg
-
-# AI 生成图片并上传（需要配置 IMAGE_API_KEY）
-md2wechat generate_image "A cute cat sitting on a windowsill"
-
-# 生成 16:9 比例的封面图（推荐，适配公众号封面）
-md2wechat generate_image --size 2560x1440 "prompt"
 ```
 
-> 💡 **公众号封面图建议**：使用 16:9 横向比例（2560x1440）作为文章封面，在微信 feed 流和文章列表中显示效果更好。方形图片（2048x2048）在预览时会被裁剪。
+#### Markdown 中插入图片
 
-#### AI 图片生成服务配置 🆕
-
-支持多种 AI 图片生成服务：
-
-| 服务 | 配置值 | 说明 | 获取方式 |
-|------|--------|------|----------|
-| **ModelScope** | `modelscope` 或 `ms` | 阿里 ModelScope，免费额度 | [modelscope.cn](https://modelscope.cn/my/myaccesstoken) |
-| **TuZi** | `tuzi` | 国产 API，稳定快速 | [tu-zi.com](https://api.tu-zi.com) |
-| **OpenAI** | `openai` | 官方 OpenAI | [platform.openai.com](https://platform.openai.com) |
-
-**配置方式**（环境变量或配置文件）：
-
-```bash
-# 使用 ModelScope（推荐，有免费额度）
-export IMAGE_PROVIDER=modelscope
-export IMAGE_API_KEY=ms-your-token-here
-export IMAGE_API_BASE=https://api-inference.modelscope.cn
-export IMAGE_MODEL=Tongyi-MAI/Z-Image-Turbo
-```
-
-```yaml
-# config.yaml
-api:
-  image_provider: modelscope
-  image_key: ms-your-token-here
-  image_base_url: https://api-inference.modelscope.cn
-  image_model: Tongyi-MAI/Z-Image-Turbo
-  image_size: 1024x1024
-```
-
-**ModelScope 特点**：
-- ✅ 有免费额度，适合测试
-- ✅ 国内服务，访问稳定
-- ✅ 默认模型 `Tongyi-MAI/Z-Image-Turbo` 生成速度快
-- ⚠️ 使用异步 API（task_id + 轮询），约 10-30 秒完成
-
-#### Markdown 中生成图片
-
-在 Markdown 中使用特殊语法生成图片：
+在 Markdown 中使用标准图片语法：
 
 ```markdown
-![产品概念图](__generate:现代智能家居设备，白色简约设计，LED指示灯__)
+<!-- 本地图片 -->
+![产品截图](./images/screenshot.png)
+
+<!-- 在线图片 -->
+![封面图](https://example.com/cover.jpg)
 ```
 
-**语法格式：** `![描述](__generate:提示词__)`
-
-- 支持中文和英文提示词
-- 生成的图片会自动上传到微信素材库
-- 需要配置图片生成服务（详见 [图片服务配置文档](docs/IMAGE_PROVISIONERS.md)）
-
-**在 Claude Code 中使用自然语言：**
-```
-"帮我在文章开头生成一张产品概念图"
-"在第三段后添加一张对比图"
-"生成一张可爱的猫"（独立生成，不关联文章）
-```
-
----
-
-## 🤖 AI 模式详解
-
-### 什么是 AI 模式？
-
-**AI 模式**使用 Claude 大模型来生成精美的公众号排版，而不是简单的 API 转换。
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     AI 模式工作流程                          │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│   1. 你用 Markdown 写文章                                    │
-│              ↓                                               │
-│   2. md2wechat 提取文章结构                                  │
-│              ↓                                               │
-│   3. 构建专业的排版提示词 (Prompt)                           │
-│              ↓                                               │
-│   4. Claude AI 根据提示词生成 HTML                          │
-│              ↓                                               │
-│   5. 返回符合微信规范的 HTML                                 │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### AI 模式的优势
-
-| 对比项 | API 模式 | AI 模式 |
-|--------|----------|----------|
-| 响应速度 | ⚡ 秒级 | 🐢 10-30秒 |
-| 排版质量 | 👍 标准规范 | 🌟 精美多样 |
-| 样式选择 | 2-3 种 | 无限可能 |
-| 成本 | 低 | 使用 Claude AI |
-| 适合场景 | 日常文章 | 重要文章、品牌内容 |
-
-### 在 Claude Code 中使用 AI 模式
-
-如果你使用 **Claude Code**，AI 模式会自动调用内置的 Claude，无需额外配置：
-
-```bash
-# 在 Claude Code 中直接运行
-md2wechat convert article.md --mode ai --theme autumn-warm
-```
+转换时使用 `--upload` 参数，图片会自动上传到微信素材库并替换为 CDN URL。
 
 ---
 
@@ -920,12 +646,10 @@ wechat:
   appid: "你的AppID"
   secret: "你的Secret"
 
-# API 配置
+# 转换配置
 api:
-  md2wechat_key: "md2wechat.cn 的 API Key"  # API 模式需要
-  convert_mode: "api"                       # 默认模式：api 或 ai
-  default_theme: "default"                  # 默认主题
-  http_timeout: 30                          # 超时时间（秒）
+  default_theme: "autumn-warm"          # 默认主题
+  http_timeout: 30                      # 超时时间（秒）
 
 # 图片处理配置
 image:
@@ -943,7 +667,7 @@ md2wechat-skill/
 ├── cmd/                    # 命令行工具
 │   └── md2wechat/         # 主程序
 ├── internal/              # 核心功能模块
-│   ├── converter/        # 转换器（API/AI）
+│   ├── converter/        # 转换器
 │   ├── draft/            # 草稿服务
 │   ├── image/            # 图片处理
 │   ├── wechat/           # 微信 API 封装
@@ -1058,7 +782,6 @@ md2wechat-skill/
 │       ├── references/    # 参考文档
 │       │   ├── themes.md      # 主题指南
 │       │   ├── html-guide.md  # HTML 规范
-│       │   ├── image-syntax.md # 图片语法
 │       │   └── wechat-api.md  # API 参考
 │       └── scripts/       # 执行脚本
 │           └── run.sh     # 智能二进制下载器
@@ -1151,7 +874,7 @@ cp -r md2wechat-skill/skills/md2wechat ~/.openclaw/skills/
 # 写好技术文章
 vim my-tech-post.md
 
-# 使用简洁的 API 模式转换
+# 转换并预览
 md2wechat convert my-tech-post.md --preview
 
 # 满意后发送草稿
@@ -1162,14 +885,14 @@ md2wechat convert my-tech-post.md --draft --cover cover.jpg
 
 ```bash
 # AI 生成产品公告内容，然后
-md2wechat convert announcement.md --mode ai --theme ocean-calm --draft --cover product-logo.png
+md2wechat convert announcement.md --theme ocean-calm --draft --cover product-logo.png
 ```
 
 ### 示例 3：生活方式博主
 
 ```bash
 # 使用春日清新主题
-md2wechat travel-diary.md --mode ai --theme spring-fresh --preview
+md2wechat convert travel-diary.md --theme spring-fresh --preview
 ```
 
 ### 示例 4：写作小白用观点生成文章 🆕
@@ -1360,71 +1083,16 @@ md2wechat write --style dan-koe --humanize
 
 **解决方案：**
 1. 缩短文章内容
-2. 减少不必要的格式（API 模式的 inline CSS 会增加内容体积）
+2. 减少不必要的格式（inline CSS 会增加内容体积）
 3. 拆分为多篇文章发布
 4. 使用更简洁的排版主题
 
-**注意：** API 模式生成的 HTML 包含大量 inline CSS，会使内容体积膨胀约 5-10 倍。长文章建议：
+**注意：** 生成的 HTML 包含大量 inline CSS，会使内容体积膨胀约 5-10 倍。长文章建议：
 - 使用更简洁的 Markdown 写作
 - 删除部分图片或使用外部图片链接
 - 手动在微信编辑器中复制粘贴（绕过 API 限制）
 
 **来源：** [微信公众号 API 文档](https://developers.weixin.qq.com/doc/subscription/api/draftbox/draftmanage/api_draft_add.html)
-</details>
-
-<details>
-<summary><b>Q: ModelScope 图片生成需要多久？</b></summary>
-
-**A:** ModelScope 使用异步 API 模式，通常需要 10-30 秒。
-
-**流程：**
-1. 发起请求 → 获取 task_id
-2. 轮询任务状态（每 5 秒一次）
-3. 任务完成 → 返回图片 URL
-
-**超时设置：**
-- 默认最大轮询时间：120 秒
-- 超时后会返回错误，建议：
-  - 简化提示词
-  - 重试一次
-  - 检查 ModelScope 服务状态
-</details>
-
-<details>
-<summary><b>Q: 如何配置 ModelScope 图片生成？</b></summary>
-
-**A:** ModelScope 是推荐的图片生成服务，有免费额度。
-
-**配置步骤：**
-
-1. **获取 API Key**
-   - 访问 [modelscope.cn](https://modelscope.cn/my/myaccesstoken)
-   - 登录后创建 Access Token
-   - 格式类似：`ms-your-token-here`
-
-2. **配置环境变量**
-   ```bash
-   export IMAGE_PROVIDER=modelscope
-   export IMAGE_API_KEY=ms-your-token-here
-   export IMAGE_API_BASE=https://api-inference.modelscope.cn
-   export IMAGE_MODEL=Tongyi-MAI/Z-Image-Turbo
-   ```
-
-3. **或在配置文件中设置**
-   ```yaml
-   # ~/.config/md2wechat/config.yaml
-   api:
-     image_provider: modelscope
-     image_key: ms-your-token-here
-     image_base_url: https://api-inference.modelscope.cn
-     image_model: Tongyi-MAI/Z-Image-Turbo
-     image_size: 1024x1024
-   ```
-
-4. **测试**
-   ```bash
-   md2wechat generate_image "A golden cat"
-   ```
 </details>
 
 <details>
@@ -1461,7 +1129,6 @@ EOF
 | [新手入门指南](QUICKSTART.md) | **强烈推荐！** 详细的图文教程 |
 | [完整使用说明](docs/USAGE.md) | 所有命令和选项 |
 | [OpenClaw 安装指南](docs/OPENCLAW.md) | OpenClaw 平台安装配置指南 |
-| [图片服务配置](docs/IMAGE_PROVISIONERS.md) | AI 图片生成服务完整配置指南 |
 | [写作功能指南](writers/README.md) | 如何使用和自定义写作风格 |
 | [写作功能问答](docs/WRITING_FAQ.md) | 写作小白完整指南 |
 | [AI 去痕指南](skills/md2wechat/references/humanizer.md) | AI 写作去痕完整指南 |

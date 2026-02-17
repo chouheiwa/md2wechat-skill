@@ -12,12 +12,10 @@ import (
 // Theme 主题定义
 type Theme struct {
 	Name        string            `yaml:"name"`
-	Type        string            `yaml:"type"`         // "api" | "ai"
 	Description string            `yaml:"description"`
 	Version     string            `yaml:"version"`
 	StyleInfo   ThemeStyleInfo    `yaml:"style_info,omitempty"`
 	Colors      map[string]string `yaml:"colors,omitempty"`
-	APITheme    string            `yaml:"api_theme,omitempty"`
 	Prompt      string            `yaml:"prompt,omitempty"`
 }
 
@@ -91,9 +89,6 @@ func (tm *ThemeManager) loadThemeFromFile(path string) error {
 	if theme.Name == "" {
 		return fmt.Errorf("theme name is required")
 	}
-	if theme.Type == "" {
-		theme.Type = "ai" // 默认为 AI 模式
-	}
 
 	// 如果 description 为空，设置默认值
 	if theme.Description == "" {
@@ -154,36 +149,7 @@ func (tm *ThemeManager) ListThemes() []string {
 
 // ListAIThemes 列出所有 AI 主题
 func (tm *ThemeManager) ListAIThemes() []string {
-	var names []string
-	for name, theme := range tm.themes {
-		if theme.Type == "ai" {
-			names = append(names, name)
-		}
-	}
-	return names
-}
-
-// ListAPIThemes 列出所有 API 主题
-func (tm *ThemeManager) ListAPIThemes() []string {
-	var names []string
-	for name, theme := range tm.themes {
-		if theme.Type == "api" {
-			names = append(names, name)
-		}
-	}
-	return names
-}
-
-// GetAPITheme 获取 API 模式的主题名
-func (tm *ThemeManager) GetAPITheme(name string) (string, error) {
-	theme, err := tm.GetTheme(name)
-	if err != nil {
-		return "", err
-	}
-	if theme.Type != "api" {
-		return "", fmt.Errorf("theme '%s' is not an API theme", name)
-	}
-	return theme.APITheme, nil
+	return tm.ListThemes()
 }
 
 // GetAIPrompt 获取 AI 模式的提示词
@@ -191,9 +157,6 @@ func (tm *ThemeManager) GetAIPrompt(name string) (string, error) {
 	theme, err := tm.GetTheme(name)
 	if err != nil {
 		return "", err
-	}
-	if theme.Type != "ai" {
-		return "", fmt.Errorf("theme '%s' is not an AI theme", name)
 	}
 	if theme.Prompt == "" {
 		return "", fmt.Errorf("theme '%s' has no prompt defined", name)
@@ -228,24 +191,6 @@ func BuildCustomAIPrompt(customPrompt string) string {
 	}
 
 	return customPrompt
-}
-
-// IsAPITheme 检查是否是 API 主题
-func (tm *ThemeManager) IsAPITheme(name string) bool {
-	theme, err := tm.GetTheme(name)
-	if err != nil {
-		return false
-	}
-	return theme.Type == "api"
-}
-
-// IsAITheme 检查是否是 AI 主题
-func (tm *ThemeManager) IsAITheme(name string) bool {
-	theme, err := tm.GetTheme(name)
-	if err != nil {
-		return false
-	}
-	return theme.Type == "ai"
 }
 
 // GetThemeDescription 获取主题描述

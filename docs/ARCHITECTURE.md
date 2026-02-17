@@ -55,7 +55,7 @@
 | 模式 | 应用位置 | 说明 |
 |------|----------|------|
 | **Builder** | PromptBuilder | 构建复杂的 AI 提示词 |
-| **Strategy** | API/AI 转换模式 | 可切换的转换策略 |
+| **Strategy** | AI 转换模式 | 可切换的转换策略 |
 | **Facade** | Converter 接口 | 简化复杂的转换流程 |
 | **Factory** | ThemeManager | 创建和管理主题 |
 | **Singleton** | Config/Logger | 全局共享配置 |
@@ -84,8 +84,8 @@ func (c *converter) convertViaAIWithFallback(req *ConvertRequest) *ConvertResult
     // 尝试 AI 模式
     result := c.convertViaAI(req)
     if !result.Success {
-        // 降级到 API 模式或通用模板
-        return c.convertViaAPI(req)
+        // 降级到通用模板
+        return c.convertViaTemplate(req)
     }
     return result
 }
@@ -234,10 +234,9 @@ func TestConverter_ExtractImages(t *testing.T) {
     markdown := `
 ![local](./test.jpg)
 ![online](https://example.com/img.jpg)
-![ai](__generate:prompt__)
 `
     images := conv.ExtractImages(markdown)
-    assert.Equal(t, 3, len(images))
+    assert.Equal(t, 2, len(images))
     assert.Equal(t, ImageTypeLocal, images[0].Type)
     // ...
 }
@@ -326,7 +325,7 @@ tmp/
 
 | 操作 | 耗时估算 |
 |------|----------|
-| API 转换 | 1-3 秒 |
+| API 转换 | 不适用 |
 | AI 转换 | 10-30 秒 |
 | 图片上传 | 2-5 秒/张 |
 | 草稿创建 | 1-2 秒 |

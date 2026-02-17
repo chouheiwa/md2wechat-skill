@@ -74,55 +74,24 @@ md2wechat convert article.md --upload --draft
 
 ## 转换模式
 
-### API 模式（推荐新手）
+### 使用主题
 
-使用 md2wechat.cn API 进行转换，稳定可靠。
-
-```bash
-md2wechat convert article.md --mode api --api-key "your_key"
-```
-
-**特点**：
-- 转换速度快
-- 结果稳定一致
-- 需要注册 API Key
-
-**可用主题**：
-- `default` - 默认主题
-- `bytedance` - 字节跳动风格
-- `apple` - Apple 极简风格
-- `sports` - 运动活力风格
-- `chinese` - 中国传统文化风格
-- `cyber` - 赛博朋克风格
-
-### AI 模式（适合定制）
-
-使用 AI 生成 HTML，更加灵活。
+使用 Claude AI 生成精美 HTML 排版。
 
 ```bash
-md2wechat convert article.md --mode ai --theme autumn-warm
+md2wechat convert article.md --theme autumn-warm
 ```
 
 **特点**：
 - 高度可定制
-- 主题更精美
-- 需要 AI API Key
+- 主题精美
+- 在 Claude Code 中自动调用内置 AI
 
 **可用主题**：
 - `autumn-warm` - 秋日暖光
 - `spring-fresh` - 春日清新
 - `ocean-calm` - 深海静谧
 - `custom` - 自定义
-
-### 模式对比
-
-| 特性 | API 模式 | AI 模式 |
-|------|---------|---------|
-| 速度 | 快 | 较慢 |
-| 稳定性 | 高 | 中 |
-| 主题选择 | 基础 | 丰富 |
-| 成本 | 需要 API Key | 需要 AI Key |
-| 适用场景 | 日常使用 | 追求美观 |
 
 ---
 
@@ -138,9 +107,6 @@ md2wechat convert article.md --mode ai --theme autumn-warm
 
 <!-- 在线图片：会先下载再上传 -->
 ![图片描述](https://example.com/image.jpg)
-
-<!-- AI 生成图片：会调用 API 生成 -->
-![图片描述](__generate:A cute orange cat__)
 ```
 
 ### 自动上传
@@ -161,24 +127,6 @@ md2wechat upload_image ./photo.jpg
 
 # 下载并上传在线图片
 md2wechat download_and_upload https://example.com/image.jpg
-```
-
-### AI 生成图片
-
-```bash
-# 生成图片并上传
-md2wechat generate_image "A beautiful sunset over mountains"
-```
-
-输出示例：
-
-```json
-{
-  "success": true,
-  "prompt": "A beautiful sunset over mountains",
-  "media_id": "12345***6789",
-  "wechat_url": "http://mmbiz.qpic.cn/..."
-}
 ```
 
 ### 图片压缩
@@ -207,13 +155,13 @@ image:
 
 ```bash
 # 秋日暖光
-md2wechat convert article.md --mode ai --theme autumn-warm
+md2wechat convert article.md --theme autumn-warm
 
 # 春日清新
-md2wechat convert article.md --mode ai --theme spring-fresh
+md2wechat convert article.md --theme spring-fresh
 
 # 深海静谧
-md2wechat convert article.md --mode ai --theme ocean-calm
+md2wechat convert article.md --theme ocean-calm
 ```
 
 ### 主题预览
@@ -227,7 +175,7 @@ md2wechat convert article.md --mode ai --theme ocean-calm
 ### 自定义提示词
 
 ```bash
-md2wechat convert article.md --mode ai --custom-prompt "
+md2wechat convert article.md --custom-prompt "
 请使用蓝色配色方案，创建专业的技术博客风格。
 标题使用深蓝色 #1a365d，正文使用 #2d3748。
 "
@@ -310,15 +258,13 @@ md2wechat convert my-article.md --draft
 ### 示例 2：使用精美主题
 
 ```bash
-# 1. 使用 AI 模式 + 秋日暖光主题
+# 1. 使用秋日暖光主题
 md2wechat convert my-article.md \
-  --mode ai \
   --theme autumn-warm \
   --preview
 
 # 2. 满意后，上传图片并创建草稿
 md2wechat convert my-article.md \
-  --mode ai \
   --theme autumn-warm \
   --upload \
   --draft
@@ -333,7 +279,6 @@ md2wechat convert my-article.md \
 for file in articles/*.md; do
   echo "Converting $file..."
   md2wechat convert "$file" \
-    --mode ai \
     --theme autumn-warm \
     --upload \
     --draft
@@ -361,12 +306,11 @@ md2wechat convert article.md \
 
 ## 高级技巧
 
-### 组合使用模式
+### 组合使用
 
 ```bash
-# 使用 API 模式转换，但用 AI 模式的主题提示词
+# 使用自定义提示词
 md2wechat convert article.md \
-  --mode api \
   --custom-prompt "参考 autumn-warm 主题的配色"
 ```
 

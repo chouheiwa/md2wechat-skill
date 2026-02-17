@@ -192,7 +192,7 @@ md2wechat write --style dan-koe --cover-only
 
 然后：
 1. 复制生成的提示词
-2. 用 AI 图片生成工具生成图片（**推荐使用 16:9 比例**）
+2. 用 AI 图片生成工具生成图片（**推荐使用 16:9 比例，2560x1440**）
 3. 使用 `md2wechat upload_image` 上传到微信
 4. 在转换时用 `--cover` 指定封面图
 
@@ -204,9 +204,6 @@ md2wechat write --style dan-koe --cover-only
 | **默认生成** | 2048x2048 (1:1) | 方形图片，在预览时会被裁剪 |
 
 ```bash
-# 生成 16:9 比例的封面图（推荐）
-md2wechat generate_image --size 2560x1440 "你的封面提示词"
-
 # 使用封面图推送草稿
 md2wechat convert article.md --draft --cover cover.jpg
 ```
@@ -326,7 +323,7 @@ md2wechat write --style dan-koe -o article.md
 md2wechat write --style dan-koe --cover-only > cover_prompt.txt
 
 # 3. 转换微信格式
-md2wechat convert article.md --mode ai --theme autumn-warm --preview
+md2wechat convert article.md --theme autumn-warm --preview
 ```
 
 ---

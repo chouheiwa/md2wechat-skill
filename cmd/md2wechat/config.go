@@ -161,7 +161,6 @@ func validateConfig() error {
 
 	log.Info("configuration validated",
 		zap.String("config_file", cfg.GetConfigFile()),
-		zap.String("convert_mode", cfg.DefaultConvertMode),
 		zap.String("default_theme", cfg.DefaultTheme))
 
 	return nil
@@ -178,11 +177,7 @@ func initConfigFile(outputFile string) error {
 	cfg := &config.Config{
 		WechatAppID:        "your_wechat_appid",
 		WechatSecret:       "your_wechat_secret",
-		MD2WechatAPIKey:    "your_md2wechat_api_key",
-		ImageAPIKey:        "your_image_api_key",
-		ImageAPIBase:       "https://api.openai.com/v1",
-		DefaultConvertMode: "api",
-		DefaultTheme:       "default",
+		DefaultTheme:       "autumn-warm",
 		CompressImages:     true,
 		MaxImageWidth:      1920,
 		MaxImageSize:       5 * 1024 * 1024,
@@ -214,10 +209,6 @@ func printYAMLConfig(cfg *config.Config, maskSecret bool) {
 	fmt.Printf("  secret: %s\n\n", secret)
 
 	fmt.Println("api:")
-	fmt.Printf("  md2wechat_key: %s\n", maskAPIKey(cfg.MD2WechatAPIKey, maskSecret))
-	fmt.Printf("  image_key: %s\n", maskAPIKey(cfg.ImageAPIKey, maskSecret))
-	fmt.Printf("  image_base_url: %s\n", cfg.ImageAPIBase)
-	fmt.Printf("  convert_mode: %s\n", cfg.DefaultConvertMode)
 	fmt.Printf("  default_theme: %s\n", cfg.DefaultTheme)
 	fmt.Printf("  http_timeout: %d\n\n", cfg.HTTPTimeout)
 
@@ -225,14 +216,4 @@ func printYAMLConfig(cfg *config.Config, maskSecret bool) {
 	fmt.Printf("  compress: %v\n", cfg.CompressImages)
 	fmt.Printf("  max_width: %d\n", cfg.MaxImageWidth)
 	fmt.Printf("  max_size_mb: %d\n", cfg.MaxImageSize/1024/1024)
-}
-
-func maskAPIKey(key string, mask bool) string {
-	if !mask || key == "" || key == "your_md2wechat_api_key" || key == "your_image_api_key" {
-		return key
-	}
-	if len(key) <= 8 {
-		return "***"
-	}
-	return key[:4] + "***" + key[len(key)-4:]
 }

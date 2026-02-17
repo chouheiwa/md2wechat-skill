@@ -19,18 +19,10 @@ var convertCmd = &cobra.Command{
 	Short: "Convert Markdown to WeChat HTML",
 	Long: `Convert Markdown article to WeChat Official Account formatted HTML.
 
-Supports two conversion modes:
-  - api: Use md2wechat API (stable, requires API key)
-  - ai:  Use Claude AI to generate HTML (flexible, requires AI)
+Uses Claude AI to generate beautiful themed HTML layouts.
 
-Supported themes (38 total):
-  Basic (6): default, bytedance, apple, sports, chinese, cyber
-  Minimal (8): minimal-gold, minimal-green, minimal-blue, minimal-orange, minimal-red, minimal-navy, minimal-gray, minimal-sky
-  Focus (8): focus-gold, focus-green, focus-blue, focus-orange, focus-red, focus-navy, focus-gray, focus-sky
-  Elegant (8): elegant-gold, elegant-green, elegant-blue, elegant-orange, elegant-red, elegant-navy, elegant-gray, elegant-sky
-  Bold (8): bold-gold, bold-green, bold-blue, bold-orange, bold-red, bold-navy, bold-gray, bold-sky
-
-  AI modes: autumn-warm, spring-fresh, ocean-calm, custom`,
+Supported AI themes:
+  autumn-warm, spring-fresh, ocean-calm, custom`,
 	Args: cobra.ExactArgs(1),
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		return initConfig()
@@ -44,11 +36,7 @@ Supported themes (38 total):
 
 // convert 命令参数
 var (
-	convertMode         string
 	convertTheme        string
-	convertAPIKey       string
-	convertFontSize     string
-	convertBackgroundType string
 	convertCustomPrompt string
 	convertOutput       string
 	convertPreview      bool
@@ -60,12 +48,8 @@ var (
 
 func init() {
 	// 添加 flags
-	convertCmd.Flags().StringVar(&convertMode, "mode", "api", "Conversion mode: api or ai")
-	convertCmd.Flags().StringVar(&convertTheme, "theme", "default", "Theme name")
-	convertCmd.Flags().StringVar(&convertAPIKey, "api-key", "", "API key for md2wechat.cn")
-	convertCmd.Flags().StringVar(&convertFontSize, "font-size", "medium", "Font size: small/medium/large (API mode only)")
-	convertCmd.Flags().StringVar(&convertBackgroundType, "background-type", "default", "Background type: default/grid/none (API mode only)")
-	convertCmd.Flags().StringVar(&convertCustomPrompt, "custom-prompt", "", "Custom AI prompt (AI mode only)")
+	convertCmd.Flags().StringVar(&convertTheme, "theme", "autumn-warm", "AI theme name (autumn-warm, spring-fresh, ocean-calm, custom)")
+	convertCmd.Flags().StringVar(&convertCustomPrompt, "custom-prompt", "", "Custom AI prompt")
 	convertCmd.Flags().StringVarP(&convertOutput, "output", "o", "", "Output HTML file path")
 	convertCmd.Flags().BoolVar(&convertPreview, "preview", false, "Preview only, do not upload images")
 	convertCmd.Flags().BoolVar(&convertUpload, "upload", false, "Upload images to WeChat and replace URLs")
@@ -80,7 +64,6 @@ func runConvert(cmd *cobra.Command, args []string) error {
 
 	log.Info("starting conversion",
 		zap.String("file", markdownFile),
-		zap.String("mode", convertMode),
 		zap.String("theme", convertTheme))
 
 	// 读取 Markdown 文件
@@ -95,11 +78,7 @@ func runConvert(cmd *cobra.Command, args []string) error {
 	// 构建转换请求
 	req := &converter.ConvertRequest{
 		Markdown:       string(markdown),
-		Mode:           converter.ConvertMode(convertMode),
 		Theme:          convertTheme,
-		APIKey:         convertAPIKey,
-		FontSize:       convertFontSize,
-		BackgroundType: convertBackgroundType,
 		CustomPrompt:   convertCustomPrompt,
 	}
 
@@ -111,13 +90,11 @@ func runConvert(cmd *cobra.Command, args []string) error {
 	}
 
 	log.Info("conversion completed",
-		zap.String("mode", string(result.Mode)),
 		zap.String("theme", result.Theme),
 		zap.Int("image_count", len(result.Images)))
 
-	// 根据模式处理结果
-	if convertMode == "ai" && converter.IsAIRequest(result) {
-		// AI 模式需要外部处理
+	// AI 模式需要外部处理
+	if converter.IsAIRequest(result) {
 		return handleAIResult(result, markdownFile)
 	}
 
@@ -203,17 +180,6 @@ func processImages(result *converter.ConvertResult) error {
 			uploadResult, err = processor.UploadLocalImage(imgRef.Original)
 		case converter.ImageTypeOnline:
 			uploadResult, err = processor.DownloadAndUpload(imgRef.Original)
-		case converter.ImageTypeAI:
-			// AI 生成的图片需要先调用生成 API
-			genResult, genErr := processor.GenerateAndUpload(imgRef.AIPrompt)
-			if genErr != nil {
-				err = genErr
-			} else {
-				uploadResult = &image.UploadResult{
-					MediaID:   genResult.MediaID,
-					WechatURL: genResult.WechatURL,
-				}
-			}
 		}
 
 		if err != nil {

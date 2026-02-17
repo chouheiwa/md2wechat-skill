@@ -1,57 +1,22 @@
 ---
 name: md2wechat
-description: Convert Markdown to WeChat Official Account HTML. Supports API mode (fast) and AI mode (themed). Features writer style assistant, AI trace removal (humanizer), and draft upload.
-metadata: {"openclaw": {"emoji": "📝", "homepage": "https://github.com/geekjourneyx/md2wechat-skill", "requires": {"anyBins": ["curl", "wget"]}, "primaryEnv": "IMAGE_API_KEY"}}
+description: Convert Markdown to WeChat Official Account HTML with beautiful themed layouts powered by Claude AI. Features writer style assistant, AI trace removal (humanizer), and draft upload.
+metadata: {"openclaw": {"emoji": "📝", "homepage": "https://github.com/geekjourneyx/md2wechat-skill", "requires": {"anyBins": ["curl", "wget"]}}}
 ---
 
 # MD to WeChat
 
-Converts Markdown articles to WeChat Official Account formatted HTML with inline CSS and optionally uploads to draft box. Supports two modes:
-
-- **API Mode**: Fast conversion using md2wechat.cn API
-- **AI Mode**: Beautiful themed layouts powered by Claude AI
+Converts Markdown articles to WeChat Official Account formatted HTML with beautiful themed layouts powered by Claude AI. Supports inline CSS and optionally uploads to draft box.
 
 ## Quick Start
 
 ```bash
-# Preview HTML (API mode, fast)
-bash skills/md2wechat/scripts/run.sh convert article.md --preview
-
-# Preview HTML (AI mode, themed)
-bash skills/md2wechat/scripts/run.sh convert article.md --mode ai --theme autumn-warm --preview
+# Preview HTML with theme
+bash skills/md2wechat/scripts/run.sh convert article.md --theme autumn-warm --preview
 
 # Upload to WeChat draft box
 bash skills/md2wechat/scripts/run.sh convert article.md --draft --cover cover.jpg
 ```
-
-### Natural Language Image Generation
-
-You can also ask me to generate images using natural language:
-
-#### Generate Image for Article (Insert into Markdown)
-
-```
-"Help me generate a product concept image at the beginning of article.md"
-"Add an image showing the product features after the second paragraph"
-"Create a diagram for the comparison section in article.md"
-```
-
-I will:
-1. Read the article to understand the context
-2. Insert the AI image generation syntax at the appropriate location
-3. Call the conversion command to generate and upload the image
-
-#### Generate Standalone Image (Not for Article)
-
-```
-"Generate an image of a cute cat sitting on a windowsill"
-"Create a product concept image: modern smart home device, white design"
-"Make a diagram showing the user flow"
-```
-
-I will:
-1. Call the image generation command directly
-2. Return the generated image URL and WeChat material ID
 
 ### Natural Language Writing Assistance
 
@@ -70,7 +35,6 @@ I will:
 2. Use the appropriate writing style (default: Dan Koe)
 3. Generate article structure and content
 4. Extract memorable quotes
-5. Optionally generate matching cover image
 
 #### Refine Existing Content
 
@@ -84,13 +48,6 @@ I will:
 1. Read your existing content
 2. Apply the selected writing style
 3. Maintain original meaning while improving expression
-
-#### Generate Cover Only
-
-```
-"Generate a cover image for my article about self-discipline"
-"Create a Victorian woodcut style cover for my philosophy piece"
-```
 
 #### AI Writing Trace Removal (Humanizer)
 
@@ -133,7 +90,7 @@ Copy this checklist to track progress:
 ```
 Progress:
 - [ ] Step 1: Analyze Markdown structure and images
-- [ ] Step 2: Confirm conversion mode (API/AI) and theme
+- [ ] Step 2: Confirm theme selection
 - [ ] Step 3: Generate HTML with inline CSS
 - [ ] Step 4: Process images (upload to WeChat)
 - [ ] Step 5: Replace image URLs in HTML
@@ -160,20 +117,12 @@ Read the markdown file and extract:
 |------|--------|------------|
 | Local | `![alt](./path/image.png)` | Upload to WeChat |
 | Online | `![alt](https://example.com/image.png)` | Download then upload |
-| AI Generate | `![alt](__generate:prompt__)` | Generate via AI then upload |
 
 ---
 
-## Step 2: Confirm Mode and Theme
+## Step 2: Confirm Theme
 
-### Conversion Mode
-
-| Mode | Speed | Style | Best For |
-|------|-------|-------|----------|
-| **API** | Fast (seconds) | Clean, standard | Quick publishing, technical content |
-| **AI** | Slower (10-30s) | Beautiful themed | Important articles, brand content |
-
-### AI Themes
+### Available Themes
 
 | Theme | Description | Best For |
 |-------|-------------|----------|
@@ -182,39 +131,15 @@ Read the markdown file and extract:
 | **ocean-calm** | Calm blue tones, professional, rational | Tech articles, business analysis |
 | **custom** | Use custom prompt | Brand customization |
 
-### API Themes (Fast)
+**Ask the user**: "Which theme would you like?" - Only ask if the user doesn't specify in their request.
 
-| Theme | Description | Best For |
-|-------|-------------|----------|
-| **default** | Default theme, clean and professional | General content |
-| **bytedance** | ByteDance style | Tech news |
-| **apple** | Apple minimalist style | Product reviews |
-| **sports** | Active sports style | Sports content |
-| **chinese** | Traditional Chinese culture style | Cultural articles |
-| **cyber** | Cyberpunk style | Frontier tech |
-
-**Ask the user**: "Which mode and theme would you like?" - Only ask if the user doesn't specify in their request.
-
-- **API mode** (fast): default, bytedance, apple, sports, chinese, cyber
-- **AI mode** (themed): autumn-warm, spring-fresh, ocean-calm
-
-**Default**: Use `API mode` if user doesn't specify.
+**Default**: Use `autumn-warm` if user doesn't specify.
 
 Read detailed style prompts from [references/themes.md](references/themes.md)
 
 ---
 
 ## Step 3: Generate HTML
-
-### API Mode
-
-Call md2wechat CLI:
-
-```bash
-bash skills/md2wechat/scripts/run.sh convert article.md --mode api
-```
-
-### AI Mode
 
 Read the selected style prompt from `references/themes.md` and generate HTML with **inline CSS**.
 
@@ -247,74 +172,6 @@ Read the selected style prompt from `references/themes.md` and generate HTML wit
 
 ## Step 4: Process Images
 
-### Image Generation Methods
-
-There are **three ways** to generate AI images:
-
-#### Method 1: Natural Language - For Article (Recommended)
-
-Simply describe what you want in plain language:
-
-```
-User: "Generate a product concept image at the beginning of article.md"
-
-User: "Add a comparison chart after the third paragraph"
-
-User: "Create an image showing the workflow diagram in article.md"
-```
-
-**How I process natural language requests:**
-
-1. **Understand the intent** - Identify where to insert the image
-2. **Read the article** - Analyze context to create an appropriate prompt
-3. **Insert the syntax** - Add `![alt](__generate:prompt__)` at the correct location
-4. **Show the prompt** - Display the generated prompt for transparency
-5. **Generate and upload** - Call the conversion command to complete
-
-**Note**: Proceed directly with generation. Only ask for confirmation if the prompt is complex or ambiguous.
-
-**Example conversation:**
-
-```
-User: "Add a product image at the start of my article"
-Claude: "I'll add a product concept image at the beginning of article.md.
-Based on your article about 'Smart Home Hub', I'll use this prompt:
-'A modern smart home hub device, sleek white design with LED indicator
-lights, minimalist product photography on a clean white background'
-I'll proceed with generating the image."
-```
-
-#### Method 2: Natural Language - Standalone Image
-
-Generate an image without any article:
-
-```
-User: "Generate an image of a cute cat sitting on a windowsill"
-User: "Create a product concept: modern smart home device"
-User: "Make a diagram showing user signup flow"
-```
-
-**I will:**
-1. Create an appropriate prompt based on your description
-2. Call: `bash skills/md2wechat/scripts/run.sh generate_image "prompt"`
-3. Return the WeChat URL and media ID
-
-**Use when:** You just need an image, not for any article.
-
-#### Method 3: Manual Syntax
-
-Write the image generation syntax directly in Markdown:
-
-```markdown
-![Product Concept](__generate:A futuristic smart home hub device, sleek design__)
-```
-
-**Syntax format:** `![alt text](__generate:prompt__)`
-
----
-
-### Processing Images by Type
-
 For each image reference in order:
 
 #### Local Image
@@ -334,26 +191,11 @@ Response:
 bash skills/md2wechat/scripts/run.sh download_and_upload "https://example.com/image.png"
 ```
 
-#### AI Generated Image (via CLI)
-
-```bash
-# Generate with default size (2048x2048 square)
-bash skills/md2wechat/scripts/run.sh generate_image "A cute cat sitting on a windowsill"
-
-# Generate with 16:9 ratio for WeChat cover (recommended)
-bash skills/md2wechat/scripts/run.sh generate_image --size 2560x1440 "prompt"
-```
-
-**WeChat Cover Images**: For article covers, use 16:9 horizontal ratio (2560x1440 recommended) as it displays better in WeChat's feed and article list. Square images (2048x2048) are cropped in preview.
-
-**Note**: AI image generation requires `IMAGE_API_KEY` environment variable.
-
 **Image Processing Pipeline**:
-1. If AI generation: Call image API → get URL
-2. If online: Download image to temp
-3. If local: Read file
-4. Compress if width > 1920px (configurable)
-5. Upload to WeChat material API
+1. If online: Download image to temp
+2. If local: Read file
+3. Compress if width > 1920px (configurable)
+4. Upload to WeChat material API
 6. Return `wechat_url` and `media_id`
 7. Store result for HTML replacement
 
@@ -417,12 +259,10 @@ Response:
 | `WECHAT_APPID` | WeChat Official Account AppID | Yes, for draft upload |
 | `WECHAT_SECRET` | WeChat API Secret | Yes, for draft upload |
 
-### Optional for AI Features
+### Optional
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `IMAGE_API_KEY` | Image generation API key | For AI images |
-| `IMAGE_API_BASE` | Image API base URL | For AI images |
 | `COMPRESS_IMAGES` | Compress images > 1920px (true/false) | No, default true |
 | `MAX_IMAGE_WIDTH` | Max width in pixels | No, default 1920 |
 
@@ -471,7 +311,7 @@ This is a simple article with no images.
 ```
 
 **Process**:
-1. Generate HTML with API mode
+1. Generate HTML with default theme (autumn-warm)
 2. Skip image processing
 3. Ask: preview or upload?
 4. If upload → create draft
@@ -494,7 +334,7 @@ Day 1 in Paris:
 4. Replace placeholder with WeChat URL
 5. Preview or upload
 
-### Example 3: AI Mode with Theme
+### Example 3: Themed Conversion
 
 **Input**: `story.md`
 ```markdown
@@ -504,30 +344,12 @@ A story about memories...
 ```
 
 **Process**:
-1. User selects AI mode + autumn-warm theme
+1. User selects autumn-warm theme
 2. Read theme prompt from references/themes.md
 3. Generate themed HTML with inline CSS
 4. Preview or upload
 
-### Example 4: AI Image Generation via Natural Language
-
-**User Request:**
-```
-"Help me add a product concept image at the beginning of article.md"
-```
-
-**Process:**
-1. Read article.md to understand the product
-2. Create an appropriate image prompt based on context
-3. Confirm with user: "I'll use this prompt: '...'"
-4. Insert `![Product Concept](__generate:...)` at line 2
-5. Run conversion command to generate and upload
-
-**Result:** Image generated and uploaded to WeChat
-
----
-
-### Example 5: Article with Pre-written Image Syntax
+### Example 4: Article with Mixed Images
 
 **Input**: `mixed.md`
 ```markdown
@@ -536,12 +358,10 @@ A story about memories...
 ![Product Photo](./product.jpg)
 
 ![Comparison Chart](https://example.com/chart.png)
-
-![Concept Art](__generate:Futuristic gadget design__)
 ```
 
 **Process:**
-1. Process 3 images in order
+1. Process 2 images in order
 2. Each returns WeChat URL
 3. Replace all placeholders
 4. Final HTML with all WeChat-hosted images
@@ -552,7 +372,7 @@ A story about memories...
 
 - [Style Themes](references/themes.md) - Detailed style prompts for AI themes
 - [HTML Guide](references/html-guide.md) - WeChat HTML constraints and best practices
-- [Image Syntax](references/image-syntax.md) - Image reference syntax and generation
+- [Image Syntax](references/image-syntax.md) - Image reference syntax
 - [Writing Guide](references/writing-guide.md) - Writer style assistant documentation
 - [Humanizer](references/humanizer.md) - AI writing trace removal documentation 🆕
 - [WeChat API](references/wechat-api.md) - API reference
@@ -586,9 +406,6 @@ convert input.tiff output.jpg
 
 **Q: Images not showing in draft**
 A: Images must use WeChat-hosted URLs (`mmbiz.qpic.cn`), not external URLs.
-
-**Q: AI image generation fails**
-A: Check `IMAGE_API_KEY` is set and API base URL is correct.
 
 ### WeChat API Issues
 
@@ -637,8 +454,6 @@ If you encounter this error:
 3. Consider splitting into multiple articles
 4. Use simpler themes with less inline styling
 
-API mode generates more inline CSS which increases content size. For very long articles, consider manual editing or splitting.
-
 **Q: API rate limit exceeded**
 A: WeChat has API limits. Wait and retry:
 ```bash
@@ -682,8 +497,8 @@ bash skills/md2wechat/scripts/run.sh --help
 # Visit: https://github.com/geekjourneyx/md2wechat-skill/releases
 ```
 
-**Q: AI mode very slow**
-A: AI mode requires Claude API call and takes 10-30 seconds. For faster results, use API mode.
+**Q: Conversion is slow**
+A: Conversion requires Claude API call and takes 10-30 seconds. This is normal for AI-powered themed generation.
 
 ---
 
@@ -698,8 +513,8 @@ bash skills/md2wechat/scripts/run.sh --help
 # Convert and preview
 bash skills/md2wechat/scripts/run.sh convert article.md --preview
 
-# Convert with AI theme
-bash skills/md2wechat/scripts/run.sh convert article.md --mode ai --theme autumn-warm --preview
+# Convert with theme
+bash skills/md2wechat/scripts/run.sh convert article.md --theme autumn-warm --preview
 
 # Convert and upload to draft
 bash skills/md2wechat/scripts/run.sh convert article.md --draft --cover cover.jpg
@@ -709,12 +524,6 @@ bash skills/md2wechat/scripts/run.sh upload_image photo.jpg
 
 # Download and upload online image
 bash skills/md2wechat/scripts/run.sh download_and_upload https://example.com/image.jpg
-
-# Generate AI image (requires IMAGE_API_KEY)
-bash skills/md2wechat/scripts/run.sh generate_image "A cute cat sitting on a windowsill"
-
-# Generate with 16:9 ratio for WeChat cover (recommended)
-bash skills/md2wechat/scripts/run.sh generate_image --size 2560x1440 "prompt"
 
 # Initialize config
 bash skills/md2wechat/scripts/run.sh config init
@@ -738,9 +547,6 @@ EOF
 
 # Write with specific style
 bash skills/md2wechat/scripts/run.sh write --style dan-koe
-
-# Generate cover prompt only
-bash skills/md2wechat/scripts/run.sh write --style dan-koe --cover-only
 
 # Remove AI writing traces (humanize)
 bash skills/md2wechat/scripts/run.sh humanize article.md

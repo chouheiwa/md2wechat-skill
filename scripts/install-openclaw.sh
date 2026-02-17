@@ -173,7 +173,6 @@ fi
 printf "\n"
 printf "${YELLOW}注意 / Note:${NC}\n"
 printf "  • WECHAT_APPID/SECRET 仅草稿上传需要，预览转换可不配置\n"
-printf "  • 图片生成需额外配置 IMAGE_API_KEY\n"
 printf "\n"
 printf "安装路径 / Installed to: ${GREEN}%s${NC}\n" "$INSTALL_DIR"
 printf "文档 / Documentation: https://github.com/${REPO}#readme\n"

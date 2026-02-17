@@ -172,10 +172,6 @@ func (pb *PromptBuilder) BuildPrompt(templateName string, vars map[string]string
 
 // BuildPromptFromTheme 从主题构建 Prompt
 func (pb *PromptBuilder) BuildPromptFromTheme(theme *Theme, markdown string, vars map[string]string) (string, error) {
-	if theme.Type != "ai" {
-		return "", fmt.Errorf("theme '%s' is not an AI theme", theme.Name)
-	}
-
 	// 设置默认变量
 	if vars == nil {
 		vars = make(map[string]string)

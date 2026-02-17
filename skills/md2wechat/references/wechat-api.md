@@ -318,45 +318,6 @@ func loadConfig() (*Config, error) {
 }
 ```
 
-## 图片生成 API
-
-使用兼容 OpenAI DALL-E 的 API。
-
-### 配置
-
-```bash
-export IMAGE_API_KEY="your_api_key"
-export IMAGE_API_BASE="https://api.example.com/v1"
-```
-
-### 调用
-
-```go
-// 生成图片
-type ImageAPIRequest struct {
-    Prompt string `json:"prompt"`
-    Size   string `json:"size"` // 1024x1024
-    N      int    `json:"n"`    // 1
-}
-
-type ImageAPIResponse struct {
-    Data []struct {
-        URL string `json:"url"`
-    } `json:"data"`
-}
-
-// POST /images/generations
-```
-
-### 错误处理
-
-| 错误 | 处理方式 |
-|------|----------|
-| API Key 无效 | 返回错误，提示检查配置 |
-| 配额超限 | 返回错误，提示稍后重试 |
-| 生成失败 | 返回错误，跳过该图片 |
-| 超时 | 重试 1 次，仍失败则跳过 |
-
 ## 最佳实践
 
 ### 1. 并发限制

@@ -33,9 +33,6 @@ func hello() {
 <!-- 在线图片：会先下载再上传 -->
 ![在线图片示例](https://picsum.photos/800/400)
 
-<!-- AI 生成图片：会调用 API 生成 -->
-![AI 生成图片](__generate:A serene landscape with mountains__)
-
 ## 列表示例
 
 ### 无序列表
@@ -54,11 +51,11 @@ func hello() {
 
 ## 表格示例
 
-| 功能 | API 模式 | AI 模式 |
-|------|----------|---------|
-| 速度 | 快 | 中 |
-| 稳定性 | 高 | 中 |
-| 主题 | 基础 | 丰富 |
+| 功能 | 说明 |
+|------|------|
+| 速度 | 10-30 秒 |
+| 主题 | 丰富（autumn-warm, spring-fresh, ocean-calm, custom） |
+| 排版 | Claude AI 生成精美 HTML |
 
 ## 分割线
 

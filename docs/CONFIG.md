@@ -29,9 +29,7 @@ wechat:
   secret: "your_secret_here"
 
 api:
-  md2wechat_key: ""           # 可选
-  convert_mode: "api"
-  default_theme: "default"
+  default_theme: "autumn-warm"
 
 image:
   compress: true
@@ -62,7 +60,7 @@ image:
 
 4. **配置 IP 白名单**（可选）
 
-   如果使用 API 模式，需要将服务器 IP 加入白名单
+   如果需要调用微信 API，需要将服务器 IP 加入白名单
 
 ---
 
@@ -98,13 +96,9 @@ wechat:
   appid: "wx1234567890abcdef"        # 必填：公众号 AppID
   secret: "your_app_secret"           # 必填：公众号 AppSecret
 
-# API 配置
+# 转换配置
 api:
-  md2wechat_key: "your_md2wechat_key"  # 可选：md2wechat.cn API Key
-  image_key: ""                         # 可选：图片生成 API Key
-  image_base_url: "https://api.openai.com/v1"  # 图片 API 地址
-  convert_mode: "api"                   # 转换模式：api 或 ai
-  default_theme: "default"              # 默认主题
+  default_theme: "autumn-warm"          # 默认主题
   http_timeout: 30                      # HTTP 超时时间（秒）
 
 # 图片处理配置
@@ -127,18 +121,8 @@ image:
 
 | 配置项 | 必填 | 说明 | 默认值 |
 |--------|------|------|--------|
-| `md2wechat_key` | 否* | md2wechat.cn API Key | - |
-| `md2wechat_base_url` | 否 | md2wechat.cn API 地址 | `https://www.md2wechat.cn` |
-| `image_key` | 否** | 图片生成 API Key | - |
-| `image_base_url` | 否 | 图片 API 地址 | `https://api.openai.com/v1` |
-| `convert_mode` | 否 | 转换模式 | `api` |
-| `default_theme` | 否 | 默认主题 | `default` |
+| `default_theme` | 否 | 默认主题 | `autumn-warm` |
 | `http_timeout` | 否 | 超时时间（秒） | `30` |
-
-> **内测地址**：如需参与内测体验新功能，可将 `md2wechat_base_url` 设置为 `https://md2wechat.app`
-
-* API 模式需要
-** AI 生成图片时需要
 
 #### 图片配置 (image)
 
@@ -158,11 +142,6 @@ image:
 |----------|-----------|------|
 | `WECHAT_APPID` | `wechat.appid` | 微信 AppID |
 | `WECHAT_SECRET` | `wechat.secret` | 微信 Secret |
-| `MD2WECHAT_API_KEY` | `api.md2wechat_key` | md2wechat API Key |
-| `MD2WECHAT_BASE_URL` | `api.md2wechat_base_url` | md2wechat API 地址 |
-| `IMAGE_API_KEY` | `api.image_key` | 图片生成 API Key |
-| `IMAGE_API_BASE` | `api.image_base_url` | 图片 API 地址 |
-| `CONVERT_MODE` | `api.convert_mode` | 转换模式 |
 | `DEFAULT_THEME` | `api.default_theme` | 默认主题 |
 | `HTTP_TIMEOUT` | `api.http_timeout` | 超时时间 |
 | `COMPRESS_IMAGES` | `image.compress` | 是否压缩 |
@@ -244,8 +223,7 @@ md2wechat config show
   "success": true,
   "config": {
     "wechat_appid": "wx123***def",
-    "default_convert_mode": "api",
-    "default_theme": "default"
+    "default_theme": "autumn-warm"
   }
 }
 ```

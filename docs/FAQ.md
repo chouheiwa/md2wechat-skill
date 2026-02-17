@@ -138,25 +138,15 @@ md2wechat config init
 
 ---
 
-### Q6: API 模式提示需要 API Key
+### Q6: 如何选择主题？
 
-**原因**：API 模式需要 [md2wechat.cn](https://md2wechat.cn) 的 API Key
-
-**解决方案 A**：获取 API Key
-
-1. 访问 [md2wechat.cn](https://md2wechat.cn)
-2. 注册账号并获取 API Key
-3. 配置：
+**解决方案**：使用 `--theme` 参数选择主题
 
 ```bash
-export MD2WECHAT_API_KEY="your_key"
+md2wechat convert article.md --theme autumn-warm
 ```
 
-**解决方案 B**：使用 AI 模式（不需要 md2wechat API Key）
-
-```bash
-md2wechat convert article.md --mode ai --theme autumn-warm
-```
+可用主题：`autumn-warm`（秋日暖光）、`spring-fresh`（春日清新）、`ocean-calm`（深海静谧）。
 
 ---
 
@@ -190,21 +180,18 @@ markdownlint article.md
 
 ---
 
-### Q8: AI 模式转换失败
+### Q8: 转换失败
 
-**原因**：AI API Key 未配置或无效
+**原因**：配置问题或网络问题
 
 **解决方案**：
 
 ```bash
-# 1. 设置 Claude API Key
-export IMAGE_API_KEY="your_claude_api_key"
-
-# 2. 验证
+# 1. 验证配置
 md2wechat config validate
 
-# 3. 重试
-md2wechat convert article.md --mode ai
+# 2. 重试
+md2wechat convert article.md --theme autumn-warm
 ```
 
 ---
@@ -215,13 +202,7 @@ md2wechat convert article.md --mode ai
 
 **解决方案**：
 
-1. **使用 API 模式**（更稳定）
-
-```bash
-md2wechat convert article.md --mode api
-```
-
-2. **检查是否使用了内联样式**
+1. **检查是否使用了内联样式**
 
 微信只支持内联 style 属性，不支持 `<style>` 标签。
 
@@ -279,26 +260,7 @@ md2wechat upload_image image2.jpg
 
 ---
 
-### Q11: AI 生成图片失败
-
-**原因**：图片生成 API Key 未配置或额度不足
-
-**解决方案**：
-
-```bash
-# 1. 设置 API Key
-export IMAGE_API_KEY="your_openai_or_claude_key"
-
-# 2. 验证
-md2wechat generate_image "test prompt"
-
-# 3. 检查 API 额度
-# 登录对应的 API 提供商查看剩余额度
-```
-
----
-
-### Q12: 图片链接未被替换
+### Q11: 图片链接未被替换
 
 **原因**：未使用 `--upload` 参数
 
@@ -451,7 +413,7 @@ jobs:
 **解决方案**：使用 custom-prompt
 
 ```bash
-md2wechat convert article.md --mode ai --custom-prompt "
+md2wechat convert article.md --custom-prompt "
 请使用以下配色：
 - 主色：#e53e3e（红色）
 - 副色：#3182ce（蓝色）
@@ -479,7 +441,6 @@ for file in articles/*.md; do
   echo "Converting $file..."
 
   md2wechat convert "$file" \
-    --mode ai \
     --theme autumn-warm \
     --upload \
     --draft

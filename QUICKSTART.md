@@ -191,7 +191,7 @@ md2wechat convert 我的文章.md --draft
 |------------|--------------|
 | 预览文章 | `md2wechat convert 文章.md --preview` |
 | 发送到草稿箱 | `md2wechat convert 文章.md --draft` |
-| 使用精美主题 | `md2wechat convert 文章.md --mode ai --theme autumn-warm` |
+| 使用精美主题 | `md2wechat convert 文章.md --theme autumn-warm` |
 | 查看配置 | `md2wechat config show` |
 | 检查配置是否正确 | `md2wechat config validate` |
 
@@ -207,7 +207,7 @@ md2wechat convert 我的文章.md --draft
 
 **用法示例**：
 ```bash
-md2wechat convert 我的文章.md --mode ai --theme autumn-warm --draft
+md2wechat convert 我的文章.md --theme autumn-warm --draft
 ```
 
 ---
@@ -246,10 +246,10 @@ md2wechat convert 文章.md --upload --draft
 
 ```bash
 # 第一步：预览效果
-md2wechat convert 产品发布.md --mode ai --theme autumn-warm --preview
+md2wechat convert 产品发布.md --theme autumn-warm --preview
 
 # 第二步：满意后，上传图片并发送到草稿箱
-md2wechat convert 产品发布.md --mode ai --theme autumn-warm --upload --draft
+md2wechat convert 产品发布.md --theme autumn-warm --upload --draft
 ```
 
 就这么简单！

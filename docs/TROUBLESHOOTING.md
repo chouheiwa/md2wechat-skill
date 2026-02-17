@@ -151,18 +151,15 @@ md2wechat convert /Users/你的名字/Documents/文章.md
 
 **原因**：AI 模式需要 API Key
 
-**解决方法 A**：使用 API 模式（更简单）
+**解决方法 A**：检查配置
 ```bash
-md2wechat convert 文章.md --mode api
+md2wechat config validate
 ```
 
-**解决方法 B**：配置 AI API Key
-1. 编辑 `md2wechat.yaml`
-2. 添加：
-   ```yaml
-   api:
-     image_key: "你的_claude_api_key"
-   ```
+**解决方法 B**：使用不同主题
+```bash
+md2wechat convert 文章.md --theme autumn-warm
+```
 
 ---
 

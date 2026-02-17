@@ -47,15 +47,12 @@ and supports uploading materials and creating drafts.
 Environment Variables:
   WECHAT_APPID                   WeChat Official Account AppID (required)
   WECHAT_SECRET                  WeChat API Secret (required)
-  IMAGE_API_KEY                  Image generation API key (for AI images)
-  IMAGE_API_BASE                 Image API base URL (default: https://api.openai.com/v1)
   COMPRESS_IMAGES                Compress images > 1920px (default: true)
   MAX_IMAGE_WIDTH                Max image width in pixels (default: 1920)
 
 Examples:
   md2wechat upload_image ./photo.jpg
   md2wechat download_and_upload https://example.com/image.jpg
-  md2wechat generate_image "A cute cat"
   md2wechat create_draft draft.json`,
 		SilenceErrors: true,
 		SilenceUsage:  true,
@@ -102,42 +99,6 @@ Examples:
 		},
 	}
 	rootCmd.AddCommand(downloadAndUploadCmd)
-
-	// generate_image command
-	var generateImageCmdSize string
-	var generateImageCmd = &cobra.Command{
-		Use:   "generate_image <prompt>",
-		Short: "Generate image via AI and upload to WeChat",
-		Args:  cobra.ExactArgs(1),
-		PreRunE: func(cmd *cobra.Command, args []string) error {
-			return initConfig()
-		},
-		Run: func(cmd *cobra.Command, args []string) {
-			prompt := args[0]
-			processor := image.NewProcessor(cfg, log)
-
-			// 如果指定了尺寸，临时覆盖配置
-			if generateImageCmdSize != "" {
-				result, err := processor.GenerateAndUploadWithSize(prompt, generateImageCmdSize)
-				if err != nil {
-					responseError(err)
-					return
-				}
-				responseSuccess(result)
-				return
-			}
-
-			result, err := processor.GenerateAndUpload(prompt)
-			if err != nil {
-				responseError(err)
-				return
-			}
-			responseSuccess(result)
-		},
-	}
-	generateImageCmd.Flags().StringVar(&generateImageCmdSize, "size", "", "Image size (e.g., 2560x1440 for 16:9)")
-	generateImageCmd.Flags().StringVar(&generateImageCmdSize, "s", "", "Image size (shorthand)")
-	rootCmd.AddCommand(generateImageCmd)
 
 	// create_draft command
 	var createDraftCmd = &cobra.Command{
