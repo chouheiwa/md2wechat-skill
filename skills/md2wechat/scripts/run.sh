@@ -105,20 +105,32 @@ ensure_binary() {
     local binary
     binary=$(get_binary_path "$platform")
 
-    # Fast path: valid cache
-    if is_cache_valid "$binary"; then
-        echo "$binary"
+    # Try local development binary first (highest priority)
+    local script_dir
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    
+    # Try project root bin/ directory (make release)
+    local project_root="${script_dir}/../../../"
+    local local_binary="${project_root}/bin/${BINARY_NAME}-${platform}"
+    [[ "$platform" == windows-* ]] && local_binary="${local_binary}.exe"
+    
+    if [[ -x "$local_binary" ]]; then
+        echo "$local_binary"
+        return 0
+    fi
+    
+    # Try project root simple binary (make build)
+    local simple_binary="${project_root}/${BINARY_NAME}"
+    [[ "$platform" == windows-* ]] && simple_binary="${simple_binary}.exe"
+    
+    if [[ -x "$simple_binary" ]]; then
+        echo "$simple_binary"
         return 0
     fi
 
-    # Try local development binary
-    local script_dir
-    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    local local_binary="${script_dir}/bin/${BINARY_NAME}-${platform}"
-    [[ "$platform" == windows-* ]] && local_binary="${local_binary}.exe"
-
-    if [[ -x "$local_binary" ]]; then
-        echo "$local_binary"
+    # Fast path: valid cache
+    if is_cache_valid "$binary"; then
+        echo "$binary"
         return 0
     fi
 

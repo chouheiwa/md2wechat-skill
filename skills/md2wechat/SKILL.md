@@ -6,7 +6,7 @@ metadata: {"openclaw": {"emoji": "📝", "homepage": "https://github.com/geekjou
 
 # MD to WeChat
 
-Converts Markdown articles to WeChat Official Account formatted HTML with beautiful themed layouts powered by Claude AI. Supports inline CSS and optionally uploads to draft box.
+Converts Markdown articles to WeChat Official Account formatted HTML with beautiful themed layouts powered by Claude AI. All conversions use AI-powered theme generation with inline CSS. Supports draft upload to WeChat Official Account.
 
 ## Quick Start
 
@@ -134,6 +134,8 @@ Read the markdown file and extract:
 **Ask the user**: "Which theme would you like?" - Only ask if the user doesn't specify in their request.
 
 **Default**: Use `autumn-warm` if user doesn't specify.
+
+All themes use AI-powered generation with Claude to create beautiful, themed HTML with inline CSS.
 
 Read detailed style prompts from [references/themes.md](references/themes.md)
 
@@ -498,7 +500,7 @@ bash skills/md2wechat/scripts/run.sh --help
 ```
 
 **Q: Conversion is slow**
-A: Conversion requires Claude API call and takes 10-30 seconds. This is normal for AI-powered themed generation.
+A: Conversion uses Claude AI for theme generation and takes 10-30 seconds. This is normal for AI-powered themed HTML generation.
 
 ---
 
